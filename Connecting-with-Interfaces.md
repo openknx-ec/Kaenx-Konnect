@@ -1,8 +1,4 @@
-There are currently three type of Interfaces:
- - [IP-Interface](#ip-interface)
- - [IP-Router](#ip-router)
- - [USB-Interface](#usb-interface)
-
+## Interface Events
 All Interfaces have the same four Events:
 - OnTunnelRequest: 
   Is Invoked when the Interface receives a Request. (GroupValueWrite, IndividualAddressRead, etc.)
@@ -44,4 +40,19 @@ IKnxConnection _connUsb = new KnxUsbTunneling(def);
 await _connUsb.Connect();
 await Task.Delay(5000);
 await _connUsb.Disconnect();
+```
+
+## Search for Interfaces
+You can search for Interfaces in your Local Network.  
+Please use IP-Routing for searches (dont connect with IP-Tunneling to broadcast IP).
+```C#
+KnxIpRouting _connIp = new KnxIpRouting();
+_connIp.OnSearchResponse += HandleSearchResponse;
+_connIp.Search();
+```
+```C#
+private void HandleSearchResponse(MsgSearchResp message)
+{
+    Debug.WriteLine($"Found: {message.FriendlyName} (PA: {message.PhAddr.ToString()})");
+}
 ```
