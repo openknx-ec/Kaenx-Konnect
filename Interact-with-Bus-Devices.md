@@ -5,7 +5,7 @@ First i have to tell you about the two types of connections:
   
 ## Send to multiple devices with groupaddress
 To send data to multiple devices with a groupaddress you have to use the BusCommon class.
-In the example below you already connected to an interface.  
+In the example below you are already connected to an interface.  
 ```C#
 IKnxConnection _conn; //An Interface which you already connected 
 BusCommon bus = new BusCommon(_conn);
@@ -28,7 +28,7 @@ await bus.IndividualAddressWrite(UnicastAddress.FromString("1.1.6"));
 
 ## Send to a single Device
 To send data to a single device you will have to know its physical address (1.1.3 for example).  
-In the example below you already connected to an interface.  
+In the example below you are already connected to an interface.  
 ```C#
 IKnxConnection _conn; //An Interface which you already connected with.
 BusDevice device = new BusDevice("1.1.3", _conn);
@@ -58,7 +58,7 @@ int maxapdu = await device.PropertyRead<int>(0, 56);
 ```
 Reading resources (DeviceSerialNumber, Manufacturer) so you dont have to handle if it's stored in an property or in memory.
 ```C#
-//Returns SerialNumber of Device
+//Returns SerialNumber of Device as HEX-String
 string serial = await dev.ResourceRead<string>("DeviceSerialNumber");
 //Returns SerialNumber of Device as Byte Array
 byte[] serialbytes = await dev.ResourceRead("DeviceSerialNumber");
