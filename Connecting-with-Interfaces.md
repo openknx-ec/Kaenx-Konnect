@@ -12,16 +12,13 @@ All Interfaces have the same four Events:
 ## IP-Interface
 You can connect to an IP-Interface by using IP-Tunneling.
 ```C#
-IKnxConnection _connIp = new KnxIpTunneling("192.168.0.108", 3671);
 await _connIp.Connect();
 await Task.Delay(5000);
 await _connIp.Disconnect();
-```
 If you already have the IPEndPoint you can create the connection like this:
 ```C#
 IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse("192.168.0.108"), 3671);
 IKnxConnection _connIp = new KnxIpTunneling(endpoint);
-
 ```
 
 ## IP-Router
