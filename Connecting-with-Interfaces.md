@@ -15,6 +15,7 @@ You can connect to an IP-Interface by using IP-Tunneling.
 await _connIp.Connect();
 await Task.Delay(5000);
 await _connIp.Disconnect();
+```
 If you already have the IPEndPoint you can create the connection like this:
 ```C#
 IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse("192.168.0.108"), 3671);
@@ -41,7 +42,7 @@ await _connUsb.Disconnect();
 
 ## Search for Interfaces
 You can search for Interfaces in your Local Network.  
-Please use IP-Routing for searches (dont connect with IP-Tunneling to broadcast IP).
+Please use IP-Routing for searches (do not connect with IP-Tunneling to broadcast IP).
 ```C#
 KnxIpRouting _connIp = new KnxIpRouting();
 _connIp.OnSearchResponse += HandleSearchResponse;

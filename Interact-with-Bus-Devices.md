@@ -7,21 +7,22 @@ First i have to tell you about the two types of connections:
 To send data to multiple devices with a groupaddress you have to use the BusCommon class.
 In the example below you are already connected to an interface.  
 ```C#
-IKnxConnection _conn; //An Interface which you already connected 
+IKnxConnection _conn; //An Interface which is already connected 
 BusCommon bus = new BusCommon(_conn);
 await bus.GroupValueWrite(MulticastAddress.FromString("1/4/3"), 0x1);
 await bus.GroupValueWrite(MulticastAddress.FromString("1/4/4"), new byte[] { 0x1, 0x23 });
 ```
-If you dont want to handle conversion by yourself, you can use the DptConverter class.
+If you don't want to handle conversion by yourself, you can use the DptConverter class.
 ```C#
-DptConverter.ToByteArray(DPTs.DPT5, 15)
-DptConverter.ToByteArray(DPTs.DPT1, true)
+byte[] data = DptConverter.ToByteArray(DPTs.DPT5, 15);
+data = DptConverter.ToByteArray(DPTs.DPT1, true);
 int position = DptConverter.FromByteArray<string>(DPTs.DPT5, message.Raw);
 bool state = DptConverter.FromByteArray<string>(DPTs.DPT1, message.Raw);
 ```
-There is also a way to search for devices with prog mode on
+There is also a way to search for devices with prog mode on.
 ```C#
 await bus.IndividualAddressRead();
+//Each device with prog mode on will send an IndividualAddressResponse which will be handled by the OnTunnelResponse Event from the interface
 //And write new PA if one device has prog mode on
 await bus.IndividualAddressWrite(UnicastAddress.FromString("1.1.6"));
 ```
@@ -62,4 +63,16 @@ Reading resources (DeviceSerialNumber, Manufacturer) so you dont have to handle 
 string serial = await dev.ResourceRead<string>("DeviceSerialNumber");
 //Returns SerialNumber of Device as Byte Array
 byte[] serialbytes = await dev.ResourceRead("DeviceSerialNumber");
+```
+## Combine it
+You can also combine both methods with the same interface connection.
+```C#
+IKnxConnection _conn; //An Interface which is already connected 
+BusDevice device = new BusDevice("1.1.3", _conn);
+await device.Connect();
+await device.MemoryWrite(14365, new byte[] { 0x02, 0xF3, 0xD1 });
+await device.Disconnect();
+BusCommon bus = new BusCommon(_conn);
+await bus.GroupValueWrite(MulticastAddress.FromString("1/4/3"), 0x1);
+
 ```
