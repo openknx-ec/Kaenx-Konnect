@@ -39,6 +39,8 @@ await _connUsb.Connect();
 await Task.Delay(5000);
 await _connUsb.Disconnect();
 ```
+> For now you will have to open ETS to make it work.  
+Often you can't connect to the usb interface without ets.
 
 ## Search for Interfaces
 You can search for Interfaces in your Local Network.  
