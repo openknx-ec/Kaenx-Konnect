@@ -12,6 +12,7 @@ All Interfaces have the same four Events:
 ## IP-Interface
 You can connect to an IP-Interface by using IP-Tunneling.
 ```C#
+IKnxConnection _connIp = new KnxIpTunneling("192.168.0.108", 3671);
 await _connIp.Connect();
 await Task.Delay(5000);
 await _connIp.Disconnect();
@@ -26,14 +27,14 @@ IKnxConnection _connIp = new KnxIpTunneling(endpoint);
 To connect to an IP-Router you don't need the ip or port.  
 You also don't need the methods connect or disconnect.
 ```C#
-IKnxConnection _connIp = new KnxIpRouting(); //Will connect to broadcast Ip "224.0.23.12"
-//await _connIp.Connect(); Method Connect won't have any affect
-//await _connIp.Disconnect(); Will also have no affect
+IKnxConnection _connIp = new KnxIpRouting(); // Will broadcast to "224.0.23.12"
+await _connIp.Connect(); // start handling received telegrams
+await _connIp.Disconnect(); // stop handling received telegrams
 ```
 
 ## USB-Interface
 ```C#
-ConnectedDeviceDefinition def; //See Device.Net on how to get ConnectedDeviceDefinition
+ConnectedDeviceDefinition def; // See Device.Net on how to get ConnectedDeviceDefinition
 IKnxConnection _connUsb = new KnxUsbTunneling(def);
 await _connUsb.Connect();
 await Task.Delay(5000);
@@ -46,7 +47,7 @@ Often you can't connect to the usb interface without ets.
 You can search for Interfaces in your Local Network.  
 Please use IP-Routing for searches (do not connect with IP-Tunneling to broadcast IP).
 ```C#
-KnxIpRouting _connIp = new KnxIpRouting();
+KnxIpSearch _connIp = new KnxIpSearch();
 _connIp.OnSearchResponse += HandleSearchResponse;
 _connIp.Search();
 ```
