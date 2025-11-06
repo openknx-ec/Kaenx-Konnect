@@ -7,7 +7,7 @@ First i have to tell you about the two types of connections:
 To send data to multiple devices with a groupaddress you have to use the BusCommon class.
 In the example below you are already connected to an interface.  
 ```C#
-IKnxConnection _conn; //An Interface which is already connected 
+IKnxConnection _conn; //An Interface which is already connected, for example IpKnxConnection
 BusCommon bus = new BusCommon(_conn);
 await bus.GroupValueWrite(MulticastAddress.FromString("1/4/3"), 0x1);
 await bus.GroupValueWrite(MulticastAddress.FromString("1/4/4"), new byte[] { 0x1, 0x23 });
@@ -16,8 +16,8 @@ If you don't want to handle conversion by yourself, you can use the DptConverter
 ```C#
 byte[] data = DptConverter.ToByteArray(DPTs.DPT5, 15);
 data = DptConverter.ToByteArray(DPTs.DPT1, true);
-int position = DptConverter.FromByteArray<string>(DPTs.DPT5, message.Raw);
-bool state = DptConverter.FromByteArray<string>(DPTs.DPT1, message.Raw);
+int position = DptConverter.FromByteArray<int>(DPTs.DPT5, message.Raw);
+bool state = DptConverter.FromByteArray<bool>(DPTs.DPT1, message.Raw);
 ```
 There is also a way to search for devices with prog mode on.
 ```C#
@@ -36,6 +36,8 @@ BusDevice device = new BusDevice("1.1.3", _conn);
 //Connect will also read MaskVersion and MaxAPDULength
 //You can disable read MaxAPDULength with bool Parameter = false
 await device.Connect();
+// Read Prop from ObjectIndex=0 (Device) and PropertyId=11 (Serial)
+string serial = await device.PropertyRead<string>(0, 11);
 [...]
 await device.Disconnect();
 ```
